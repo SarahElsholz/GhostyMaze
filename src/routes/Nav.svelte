@@ -5,7 +5,7 @@
 
 	let showMenu = false;
     let current = 'home';
-  
+
 	function toggleNavbar() {
 		showMenu = !showMenu;
 	}
@@ -15,9 +15,9 @@
     <div>
       <nav class="container bg-middleblue px-2 mx-auto md:flex md:justify-between md:items-center">
         <div class="flex items-center justify-between">
-            <img src="/src/assets/logo3.png" class="h-16 mr-8 px-3 py-1" alt="Flowbite Logo" />
+            <img src="/static/assets/logo3.png" class="h-16 mr-8 px-3 py-1" alt="Flowbite Logo" />
             <span class="self-center text-xl font-semibold whitespace-nowrap text-white">Ghosty's Super Maze</span>
-         
+
             <div on:click={toggleNavbar} class="flex md:hidden">
                 <button
                 type="button"
@@ -29,7 +29,7 @@
             </div>
         </div>
         <div id="nav" class="flex-col mt-8 space-y-2 md:flex text-xl font-semibold md:space-y-0 md:flex-row ml-64 md:mt-0 {showMenu ? 'flex' : 'hidden'}">
-        
+
             {#if current === 'maze'}
               <div class="text-gray-800 hover:text-middleblue">
                 <a id="nav-item" class="nav-link whitespace-nowrap text-white" on:click="{() => current = 'home'}" href="/"> Go back Home</a>

@@ -1,10 +1,10 @@
 <script lang="ts">
     import {onMount} from 'svelte';
 	import { null_to_empty } from 'svelte/internal';
-	
+
     //wall id type
         interface WallID {start: {x: number, y: number}, end: {x: number, y: number}}
-    
+
     //global variables
         const distance = 10;
         let w;
@@ -65,7 +65,7 @@
         interface MazeGrid {
                 gridSize: number, //value defines height and width of the grid(identical)
                 colNum: number, //number of columns and rows(identical)
-                grid: Cell[] 
+                grid: Cell[]
             }
 
     //type declaration for the individual cells
@@ -136,7 +136,7 @@
                         cell.neighbours.bottom = bottomNeighbour;
                     }
                     }
-                    
+
     //check for left neighbour
                     function getLeftNeighbour(cell: Cell, mazeGrid: MazeGrid){
                         if(cell.position.x !== 0){
@@ -155,43 +155,43 @@
                         cell.neighbours.left = leftNeighbour;
                     }
                     }
-    
+
         //check wall collision
         function checkTopCollision(x: number, y: number, walls: [top:WallID[],bottom:WallID[], left:WallID[], right:WallID[]]){
             let topWalls = walls[0];
-            
+
             for(let wall of topWalls){
                 if(wall.start.x === x-20 && wall.start.y === y-15){
-                        return true;     
+                        return true;
                 }
-            } 
+            }
         }
         function checkBottomCollision(x: number, y: number, walls: [top:WallID[],bottom:WallID[], left:WallID[], right:WallID[]]){
             let bottomWalls = walls[1];
-            
+
             for(let wall of bottomWalls){
                 if(wall.start.x === x-20 && wall.start.y === y+85){
-                        return true;    
+                        return true;
                 }
-            } 
+            }
         }
         function checkLeftCollision(x: number, y: number, walls: [top:WallID[],bottom:WallID[], left:WallID[], right:WallID[]]){
             let leftWalls = walls[2];
-            
+
             for(let wall of leftWalls){
                 if(wall.start.x === x-20 && wall.start.y === y-15){
-                        return true;    
+                        return true;
                 }
-            } 
+            }
         }
         function checkRightCollision(x: number, y: number, walls: [top:WallID[],bottom:WallID[], left:WallID[], right:WallID[]]){
             let rightWalls = walls[3];
-            
+
             for(let wall of rightWalls){
                 if(wall.start.x === x+80 && wall.start.y === y-15){
-                        return true;    
+                        return true;
                 }
-            } 
+            }
         }
 
     //assets
@@ -223,7 +223,7 @@
                 function drawAsset(asset: HTMLImageElement, assetX: number, assetY: number){
                     ctx.drawImage(asset, assetX, assetY, width, width);
                 }
-                
+
                 function renderAssets(){
                     for(let fruit in fruits){
                         ctx.clearRect(fruits[fruit].x, fruits[fruit].y, width-40, width-40);
@@ -256,11 +256,11 @@
                     drawAsset(presentImage, badPresentX, badPresentY);
                 };
                 let assetInterval: NodeJS.Timer;
-                
+
                 function stopInterval(){
                     clearInterval(assetInterval);
                 };
-            
+
 
     //keydown
         function handleKeydown(event: KeyboardEvent){
@@ -366,12 +366,12 @@
                     }
                     return;
                 }
-           
+
             ctx.clearRect(imgX, imgY, width-30, width-20);
             if(event.key === "ArrowUp"){
                 // event.preventDefault();
                 let collision = checkTopCollision(imgX, imgY, walls);
-                
+
                 if(!collision){
                     imgY -= 100;
                     ctx.drawImage(ghost, imgX, imgY, width-40, width-15);
@@ -388,7 +388,7 @@
                 }else{
                     ctx.drawImage(ghost, imgX, imgY, width-40, width-15);
                 }
-                
+
             }else if(event.key === "ArrowLeft"){
                 let collision = checkLeftCollision(imgX, imgY, walls);
                 if(!collision){
@@ -397,7 +397,7 @@
                 }else{
                     ctx.drawImage(ghost, imgX, imgY, width-40, width-15);
                 }
-               
+
             }else if(event.key === "ArrowRight"){
                 let collision = checkRightCollision(imgX, imgY, walls);
                 if(!collision){
@@ -406,7 +406,7 @@
                 }else{
                     ctx.drawImage(ghost, imgX, imgY, width-40, width-15);
                 }
-            }	
+            }
         }
 
     //restart
@@ -415,7 +415,7 @@
             level = 1;
             scores.length = 0;
             setTimeout(renew, 300);
-            
+
         }
 
     //renew canvas
@@ -425,7 +425,7 @@
             assetInterval = setInterval(renderAssets, 5000);
             createMaze("#ffffff");
             ctx.drawImage(ghost, imgX, imgY, width-40, width-15);
-            
+
             timerDiv.style.display = 'flex';
             timerMinutes = 0;
             timerSeconds = 0;
@@ -455,7 +455,7 @@
             imgY = (canvas.width-((canvas.width/(canvas.width/width))-15));
             console.log(imgY)
             ctx = canvas.getContext("2d")!;
-             
+
     //add cells to the grid
                 function addCells(grid: Cell[]){
                     let x: number = 0;
@@ -485,12 +485,12 @@
                             else if(x === canvas.width - (canvas.width/mazeGrid.colNum)){
                                 x = 0;
                                 y += (canvas.width/mazeGrid.colNum);
-                            } 
+                            }
                         }
                     }
                 }
-                
-    //walls 
+
+    //walls
                 //get top walls
                     function getTop(cell: Cell){
                         if(cell.walls.topWall === true){
@@ -519,7 +519,7 @@
                             walls[2].push(wall)
                         }else{return}
                     }
-            
+
     //check neighbour position and remove walls
                 function removeNeighbouringWall(selected: Cell, current: Cell){
                             //check if neighbour is top
@@ -528,7 +528,7 @@
                                 current.walls.topWall = false;
                                 selected.walls.bottomWall = false;
                             }
-                                
+
                             //check if neighbour is right
                             if(selected.position.x > current.position.x){
                                 //yes? neighbour.leftWall = false, current.rightWall = false
@@ -550,15 +550,15 @@
                                 selected.walls.rightWall = false;
                             }
                             }
-        
+
     //INITALIZING MAZE
-                
+
                 let grid: Cell[] = []
-                addCells(grid)    
-                
+                addCells(grid)
+
                 let stack: Cell[] = [];
                 let visited: Cell[] = [];
-                
+
                 function main(grid: Cell[], current: Cell, stack: Cell[]){
                     if(current){
                         let isVisited = visited.includes(current);
@@ -586,10 +586,10 @@
                             parseStack = updateStack;
                         }
                         while(visited.length !== grid.length){
-                            main(grid, current, parseStack)  
+                            main(grid, current, parseStack)
                         }
                     }else{console.log("Cell not found")}
-        
+
                     }
 
                     function findNeighbours(cell: Cell, visited: Cell[]){
@@ -601,8 +601,8 @@
                                 let unvisitedCell = grid.find(cu => cu.position.x === c.position.x && cu.position.y === c.position.y)
                                 if(unvisitedCell){
                                     unvisited.push(unvisitedCell)
-                                } 
-                            }   
+                                }
+                            }
                         }
                         let idx = Math.floor(Math.random()*unvisited.length);
                         let selected = unvisited[idx];
@@ -624,7 +624,7 @@
                                 getBottom(cell);
                                 getLeft(cell);
                             }
-                            
+
                         }
                     renderMaze(visited)
                     for(let pos of walls){
@@ -638,9 +638,9 @@
                     }
 
                     console.log(grid);
-                    console.log(walls);         
+                    console.log(walls);
         }
-          
+
 //MOUNT canvas
         onMount(()=>{
             createMaze("#ffffff");
@@ -667,7 +667,7 @@
                         seconds = `0${timerSeconds}`
                     }else{
                         seconds = `${timerSeconds}`
-                    } 
+                    }
                     if(timerMinutes < 10){
                         minutes = `0${timerMinutes}`
                     }else{
@@ -678,7 +678,7 @@
             return () => {
                 clearInterval(interval)
             }
-        })    
+        })
   </script>
 
 <!-- layout -->
@@ -689,25 +689,25 @@
         <div class="p-4"><h1>Level {level}</h1></div>
     </div>
     <div id="ghostRectangle" style="top:100px;left:100px; display: none;" bind:this={rectangle}>
-        <img src="./src/assets/ghost.png" alt="ghost" width="100" id="ghost" bind:this={ghost} >
+        <img src="./static/assets/ghost.png" alt="ghost" width="100" id="ghost" bind:this={ghost} >
     </div>
     <div id="rectangle" style="top:100px;left:100px; display: none;">
-        <img src="./src/assets/enemy.svg" alt="enemy" width="100" id="enemy" bind:this={enemy}>
+        <img src="./static/assets/enemy.svg" alt="enemy" width="100" id="enemy" bind:this={enemy}>
     </div>
     <div id="fruitrectangle" style="top:100px;left:100px; display: none;">
-        <img src="./src/assets/fruit1.png" alt="fruit" width="100" id="fruit" bind:this={fruitImage}>
+        <img src="./static/assets/fruit1.png" alt="fruit" width="100" id="fruit" bind:this={fruitImage}>
     </div>
     <div id="presentrectangle" style="top:100px;left:100px; display: none;">
-        <img src="./src/assets/present.png" alt="present" width="100" id="present" bind:this={presentImage}>
+        <img src="./static/assets/present.png" alt="present" width="100" id="present" bind:this={presentImage}>
     </div>
     <div class="p-4 flex justify-center" id="canvas">
-        <canvas id="maze" width={canvasWidth} height={canvasWidth} bind:this={canvas}></canvas> 
+        <canvas id="maze" width={canvasWidth} height={canvasWidth} bind:this={canvas}></canvas>
     </div>
     <div class="p-4 flex justify-center">
         <button type="button" on:click={newGame} class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Restart</button>
     </div>
     <div class="p-4 flex justify-center">
-        
+
         {#if scores.length !== 0}
         <ul>
             <h1>Scores</h1>
@@ -717,7 +717,7 @@
         </ul>
         {/if}
     </div>
-    
+
 <!-- style -->
     <style>
         #rectangle {
